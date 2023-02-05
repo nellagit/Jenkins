@@ -9,7 +9,7 @@ pipeline{
                         string(credentialsId: 'docker_pass', variable: 'DOCKER_PASS')]) {
                     sh "echo ${DOCKER_PASS} | docker login --username ${DOCKER_USER} --password-stdin"
                     docker.withRegistry("https://index.docker.io") {
-                    def customImage = docker.build("${DOCKER_USER}/my-image:${env.BUILD_ID}", "-f nginx/Dockerfile .")
+                    def customImage = docker.build("${DOCKER_USER}/my-image:${env.BUILD_ID}", "-f Jenkins_Task/nginx/Dockerfile .")
                     customImage.push()
                     customImage.push 'latest'
                     } 
