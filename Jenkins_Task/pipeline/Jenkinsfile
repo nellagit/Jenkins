@@ -1,4 +1,4 @@
-def remote = [:]
+    def remote = [:]
     remote.name = "My_application_server"
     remote.host = "44.195.34.156"
     remote.allowAnyHosts = true
