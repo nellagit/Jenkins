@@ -1,6 +1,11 @@
-pipeline{
+def remote = [:]
+    remote.name = "My_application_server"
+    remote.host = "44.195.34.156"
+    remote.allowAnyHosts = true
 
+pipeline{
     agent any
+    
     stages{
         stage('build step') {
             steps {
@@ -18,14 +23,17 @@ pipeline{
                 }
             }
         }
-        // stage('run step') {
-        //     steps {
-        //         script {
-        //             sh "docker run -tid -p 80:80 my-image:${env.BUILD_ID}"
-        //             //docker.image("my-image:${env.BUILD_ID}").withRun('-p 80:80') {
-        //             //}
-        //         }
-        //     }
-        // }
-    }  
+        stage('run step') {
+            steps {
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'new_ssh_user', passwordVariable: 'password', usernameVariable: 'userName')]) {
+                    remote.user = userName
+                    remote.password = password
+                    sshCommand remote: remote, command: "docker run -tid -p 80:80 nelladocker/my-image:${env.BUILD_ID}"
+
+                    }
+                }
+            }
+        }  
+    }
 }
