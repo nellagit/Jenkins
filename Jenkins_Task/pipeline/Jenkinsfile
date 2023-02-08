@@ -19,7 +19,6 @@ pipeline{
                     customImage.push 'latest'
                     } 
                     }
-                    
                 }
             }
         }
