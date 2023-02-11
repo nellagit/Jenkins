@@ -1,7 +1,7 @@
-// def remote = [:]
-// remote.name = "My_application_server"
-// remote.host = "3.238.193.169"
-// remote.allowAnyHosts = true
+def remote = [:]
+remote.name = "My_application_server"
+remote.host = "3.238.193.169"
+remote.allowAnyHosts = true
 
 pipeline{
     agent any
@@ -22,22 +22,23 @@ pipeline{
                 }
             }
         }
-        // stage('run step') {
-        //     steps {
-        //         script {
-        //             //withCredentials([usernamePassword(credentialsId: 'new_ssh_user', passwordVariable: 'password', usernameVariable: 'userName')]) {
-        //             withCredentials([sshUserPrivateKey(credentialsId: 'ssh_user', keyFileVariable: 'identity', passphraseVariable: '', usernameVariable: 'userName') 
-        //             remote.user = userName
-        //             remote.password = password
-        //             sshCommand remote: remote, command: '''
-        //                 if docker ps | grep 'nginx_app'; then
-        //                     docker rm -f nginx_app
-        //                 fi
-        //             '''
-        //             sshCommand remote: remote, command: "docker run -tid -p 80:80 --name nginx_app nelladocker/my-image:${env.BUILD_ID}"
-                    
-        //         }
-        //     }
-        // }  
+        stage('run step') {
+            steps {
+                script {
+                    //withCredentials([usernamePassword(credentialsId: 'new_ssh_user', passwordVariable: 'password', usernameVariable: 'userName')]) {
+                    withCredentials([sshUserPrivateKey(credentialsId: 'ssh_user', keyFileVariable: 'identity', passphraseVariable: '', usernameVariable: 'userName')]) { 
+                    remote.user = userName
+                    remote.identityFile = identity
+                    // remote.password = 'password'
+                    // sshCommand remote: remote, command: '''
+                    //     if docker ps | grep 'nginx_app'; then
+                    //         docker rm -f nginx_app
+                    //     fi
+                    // '''
+                    sshCommand remote: remote, command: "docker run -tid -p 80:80 --name nginx_app nelladocker/my-image:${env.BUILD_ID}"
+                    }
+                }
+            }
+        }  
     }
 }
