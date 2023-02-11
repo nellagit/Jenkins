@@ -30,11 +30,11 @@ pipeline{
                     remote.user = userName
                     remote.identityFile = identity
                     // remote.password = 'password'
-                    // sshCommand remote: remote, command: '''
-                    //     if docker ps | grep 'nginx_app'; then
-                    //         docker rm -f nginx_app
-                    //     fi
-                    // '''
+                    sshCommand remote: remote, command: '''
+                        if docker ps | grep 'nginx_app'; then
+                            docker rm -f nginx_app
+                        fi
+                    '''
                     sshCommand remote: remote, command: "docker run -tid -p 80:80 --name nginx_app nelladocker/my-image:${env.BUILD_ID}"
                     }
                 }
