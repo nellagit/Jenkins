@@ -26,7 +26,7 @@ pipeline{
             steps {
                 script {
                     //withCredentials([usernamePassword(credentialsId: 'new_ssh_user', passwordVariable: 'password', usernameVariable: 'userName')]) {
-                    withCredentials([sshUserPrivateKey(credentialsId: 'ssh_user', keyFileVariable: 'identity', passphraseVariable: '', usernameVariable: 'userName') {
+                    withCredentials([sshUserPrivateKey(credentialsId: 'ssh_user', keyFileVariable: 'identity', passphraseVariable: '', usernameVariable: 'userName') 
                     remote.user = userName
                     remote.password = password
                     sshCommand remote: remote, command: '''
@@ -35,7 +35,7 @@ pipeline{
                         fi
                     '''
                     sshCommand remote: remote, command: "docker run -tid -p 80:80 --name nginx_app nelladocker/my-image:${env.BUILD_ID}"
-                    }
+                    
                 }
             }
         }  
